@@ -1,0 +1,213 @@
+PEEKAABOO 
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>For Treasure 💖</title>
+
+<style>
+body{
+    margin:0;
+    height:100vh;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#a0c4ff,#bdb2ff);
+    font-family:Arial;
+    text-align:center;
+}
+
+.container{
+    background:white;
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.2);
+    z-index:2;
+}
+
+h1{color:#3a86ff;}
+
+button{
+    padding:15px 30px;
+    font-size:18px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    margin:10px;
+    position:relative;
+}
+
+/* Floating stars */
+.star{
+    position:absolute;
+    color:#ffd60a;
+    font-size:20px;
+    animation: float 6s linear infinite;
+}
+
+@keyframes float{
+    0%{transform:translateY(100vh);}
+    100%{transform:translateY(-10vh);}
+}
+
+/* Shake animation */
+@keyframes shake {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(5px, 0); }
+  50% { transform: translate(-5px, 0); }
+  75% { transform: translate(5px, 0); }
+  100% { transform: translate(0, 0); }
+}
+
+.shake {
+  animation: shake 0.3s;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container" id="mainBox">
+    <h1 id="typing"></h1>
+    <div id="buttons" style="display:none;">
+        <button id="yes">Yes 😄</button>
+        <button id="no">No 😅</button>
+    </div>
+</div>
+
+<script>
+
+// ===== FLOATING STARS =====
+function createStar(){
+    let star=document.createElement("div");
+    star.className="star";
+    star.innerHTML="⭐";
+    star.style.left=Math.random()*100+"vw";
+    star.style.fontSize=(Math.random()*20+10)+"px";
+    document.body.appendChild(star);
+    setTimeout(()=>star.remove(),6000);
+}
+setInterval(createStar,300);
+
+
+// ===== TYPING INTRO =====
+let message="Hey Treasure! I have a fun question for you 😄";
+let i=0;
+
+function typeText(){
+    if(i<message.length){
+        document.getElementById("typing").innerHTML+=message.charAt(i);
+        i++;
+        setTimeout(typeText,50);
+    }else{
+        countdown();
+    }
+}
+typeText();
+
+
+// ===== COUNTDOWN =====
+function countdown(){
+    let count=3;
+    let box=document.getElementById("typing");
+
+    let timer=setInterval(()=>{
+        box.innerHTML="Get ready... "+count+" 🎉";
+        count--;
+
+        if(count<0){
+            clearInterval(timer);
+            showQuestion();
+        }
+    },1000);
+}
+
+
+// ===== SHOW QUESTION =====
+function showQuestion(){
+    document.getElementById("typing").innerHTML="Treasure, do you want to play a silly game with me? 😄";
+    document.getElementById("buttons").style.display="block";
+}
+
+
+// ===== BUTTON BEHAVIORS =====
+let noBtn=document.getElementById("no");
+let yesBtn=document.getElementById("yes");
+let yesAttempts = 0;
+
+// Move + shake No button
+function moveNo(){
+    noBtn.classList.add("shake");
+    setTimeout(()=>{
+        noBtn.classList.remove("shake");
+        let x=Math.random()*(window.innerWidth-100);
+        let y=Math.random()*(window.innerHeight-50);
+        noBtn.style.left=x+"px";
+        noBtn.style.top=y+"px";
+    },300);
+}
+
+// Move + shake Yes button first 2 times
+function moveYesFirst(){
+    if(yesAttempts < 2){
+        yesBtn.classList.add("shake");
+        setTimeout(()=>{
+            yesBtn.classList.remove("shake");
+            let x=Math.random()*(window.innerWidth-100);
+            let y=Math.random()*(window.innerHeight-50);
+            yesBtn.style.left=x+"px";
+            yesBtn.style.top=y+"px";
+            yesAttempts++;
+        },300);
+    } else {
+        // Allow final click
+        yesBtn.onclick = sayYes;
+    }
+}
+
+// Event listeners
+noBtn.addEventListener("mouseover",moveNo);
+noBtn.addEventListener("click",moveNo);
+yesBtn.addEventListener("mouseover",moveYesFirst);
+yesBtn.addEventListener("click",moveYesFirst);
+
+
+// ===== CONFETTI + YES SCREEN =====
+function sayYes(){
+
+    // Confetti
+    for(let i=0;i<100;i++){
+        let conf=document.createElement("div");
+        conf.innerHTML="🎉";
+        conf.style.position="absolute";
+        conf.style.left=Math.random()*100+"vw";
+        conf.style.top="-10px";
+        conf.style.fontSize="25px";
+        conf.style.animation="fall 3s linear";
+        document.body.appendChild(conf);
+
+        setTimeout(()=>conf.remove(),3000);
+    }
+
+    document.body.innerHTML=`
+    <style>
+    @keyframes fall{
+        to{transform:translateY(100vh);}
+    }
+    </style>
+
+    <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:linear-gradient(135deg,#a0c4ff,#bdb2ff);text-align:center;">
+        <div>
+            <h1 style="color:#3a86ff;font-size:50px;">YAYYYY Treasure! 😄</h1>
+            <p style="color:#333;font-size:25px;">
+            Thanks for playing the silly game with me! You’re the best sister ever 💖
+            </p>
+        </div>
+    </div>
+    `;
+}
+
+</script>
+</body>
+</html>
